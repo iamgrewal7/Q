@@ -37,7 +37,17 @@ module.exports = {
         },
 
         popItem: async(_, args) => {
-            data["queue"].splice(data["queue"].findIndex(el => el.id === args.id), 1)
+            const idx = data["queue"].findIndex(el => el.id === parseInt(args.id))
+            const date = new Date() 
+            const temp = data["queue"][idx]
+            temp["popDate"] = date.getHours() + ":" + date.getMinutes()
+            data["queue"].splice(idx, 1)
+            data["queue"].push(temp)
+            var json = JSON.stringify(data)
+            fs.writeFile('data.json', json, 'utf8', (err) => {
+                if(err) console.log(err);
+            });
+
         }
     }
 }
